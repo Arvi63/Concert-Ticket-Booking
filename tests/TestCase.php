@@ -16,4 +16,11 @@ abstract class TestCase extends BaseTestCase
 
         Mockery::getConfiguration()->allowMockingNonExistentMethods(false);
     }
+
+    protected function fromUrl($url)
+    {
+        session()->setPreviousUrl(url($url));
+
+        return $this;
+    }
 }

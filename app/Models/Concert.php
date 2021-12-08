@@ -13,6 +13,11 @@ class Concert extends Model
     protected $guarded = [];
     protected $dates = ['date'];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function getFormattedDateAttribute()
     {
         return $this->date->format('F j, Y');
@@ -31,6 +36,16 @@ class Concert extends Model
     public function scopePublished($query)
     {
         $query->whereNotNull('published_at');
+    }
+
+    public function isPublished()
+    {
+        return $this->published_at !== null;
+    }
+
+    public function publish()
+    {
+        $this->update(['published_at' => now()]);
     }
 
     public function orders()

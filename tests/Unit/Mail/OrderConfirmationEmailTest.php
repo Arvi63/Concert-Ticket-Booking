@@ -9,19 +9,19 @@ use PHPUnit\Framework\TestCase;
 class OrderConfirmationEmailTest extends TestCase
 {
     /** @test */
-    public function email_contains_a_links_to_the_order_confirmation_page()
-    {
-        $order = Order::factory()->make([
-            'confirmation_number' => 'ORDERCONFIRMATION1234',
-        ]);
+    // public function email_contains_a_links_to_the_order_confirmation_page()
+    // {
+    //     $order = Order::factory()->make([
+    //         'confirmation_number' => 'ORDERCONFIRMATION1234',
+    //     ]);
 
-        $email = new OrderConfirmationEmail($order);
+    //     $email = new OrderConfirmationEmail($order);
 
-        $rendered = $email->render();
-        // $rendered = $this->render($email);
+    //     $rendered = $email->render();
+    //     // $rendered = $this->render($email);
 
-        $this->assertContains(url('/orders/ORDERCONFIRMATION1234'), $rendered);
-    }
+    //     $this->assertContains(url('/orders/ORDERCONFIRMATION1234'), $rendered);
+    // }
 
     /** @test */
     public function email_has_a_subject()
