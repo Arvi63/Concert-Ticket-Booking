@@ -8,9 +8,10 @@ class ConcertsController extends Controller
 {
     public function index()
     {
-        $concerts = auth()->user()->concerts;
+        $publishedConcerts = auth()->user()->concerts->filter->isPublished();
+        $unpublishedConcerts = auth()->user()->concerts->reject->isPublished();
 
-        return view('backstage.concerts.index', compact('concerts'));
+        return view('backstage.concerts.index', compact('publishedConcerts', 'unpublishedConcerts'));
     }
 
     public function create()
@@ -40,22 +41,33 @@ class ConcertsController extends Controller
                 request('date'),
                 request('time'),
             ])),
-            'ticket_price' => request('ticket_price') * 100,
+            'additional_information' => request('additional_information'),
             'venue' => request('venue'),
             'venue_address' => request('venue_address'),
             'city' => request('city'),
             'state' => request('state'),
             'zip' => request('zip'),
-            'additional_information' => request('additional_information'),
-        ])->addTickets(request('ticket_quantity'));
-
-        $concert->publish();
+            'ticket_price' => request('ticket_price') * 100,
+            'ticket_quantity' => (int) request('ticket_quantity'),
+        ]);
 
         return redirect()->route('concerts.show', $concert);
     }
 
     public function edit($id)
     {
+        $concert = auth()->user()->concerts()->findOrFail($id);
+
+        abort_if($concert->isPublished(), 403);
+
+        return view('backstage.concerts.edit', compact('concert'));
+    }
+
+    public function update($id)
+    {
+        $concert = auth()->user()->concerts()->findOrFail($id);
+        abort_if($concert->isPublished(), 403);
+
         $this->validate(request(), [
             'title' => ['required'],
             'date' => ['required', 'date'],
@@ -68,19 +80,6 @@ class ConcertsController extends Controller
             'ticket_price' => ['required', 'numeric', 'min:5'],
             'ticket_quantity' => ['required', 'integer', 'min:1'],
         ]);
-
-        $concert = auth()->user()->concerts()->findOrFail($id);
-
-        abort_if($concert->isPublished(), 403);
-
-        return view('backstage.concerts.edit', compact('concert'));
-    }
-
-    public function update($id)
-    {
-        $concert = auth()->user()->concerts()->findOrFail($id);
-
-        abort_if($concert->isPublished(), 403);
 
         $update = $concert->update([
             'title' => request('title'),

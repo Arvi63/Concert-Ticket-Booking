@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Backstage\ConcertMessagesController;
 use App\Http\Controllers\Backstage\ConcertsController;
+use App\Http\Controllers\Backstage\PublishedConcertOrdersController;
+use App\Http\Controllers\Backstage\PublishedConcertsController;
 use App\Http\Controllers\ConcertController;
 use App\Http\Controllers\ConcertOrderController;
 use App\Http\Controllers\OrderController;
@@ -27,4 +30,10 @@ Route::middleware(['auth'])->prefix('backstage')->namespace('Backstage')->group(
     Route::post('/concerts/', [ConcertsController::class, 'store']);
     Route::get('/concerts/{id}/edit', [ConcertsController::class, 'edit'])->name('backstage.concerts.edit');
     Route::patch('/concerts/{id}', [ConcertsController::class, 'update'])->name('backstage.concerts.update');
+
+    Route::post('/published-concerts', [PublishedConcertsController::class, 'store']);
+    Route::get('/published-concerts/{concert_id}/orders', [PublishedConcertOrdersController::class, 'index']);
+
+    Route::get('/concerts/{id}/message/new', [ConcertMessagesController::class, 'create'])->name('backstage.concert-message.create');
+    Route::post('/concerts/{id}/message', [ConcertMessagesController::class, 'store'])->name('backstage.concert-message.store');
 });

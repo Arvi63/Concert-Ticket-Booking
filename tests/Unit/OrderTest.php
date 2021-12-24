@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit;
 
 use App\Billing\Charge;
@@ -49,13 +48,16 @@ class OrderTest extends TestCase
     /** @test */
     public function retrieving_a_nonexistent_order_by_confirmation_number_throws_an_exception()
     {
-        $this->expectNotToPerformAssertions();
+        $this->expectException(ModelNotFoundException::class);
 
-        try {
-            Order::findByConfirmationNumber('NONEXISTENTCONFIRMATIONNUMBER');
-        } catch (ModelNotFoundException $e) {
-            return;
-        }
+        Order::findByConfirmationNumber('NONEXISTENTCONFIRMATIONNUMBER');
+
+        // $this->expectNotToPerformAssertions();
+        // try {
+        //     Order::findByConfirmationNumber('NONEXISTENTCONFIRMATIONNUMBER');
+        // } catch (ModelNotFoundException $e) {
+        //     return;
+        // }
 
         $this->fail('Order found for non existent confirmation number,but exception was expected');
     }

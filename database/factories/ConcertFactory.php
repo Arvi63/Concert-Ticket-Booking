@@ -1,7 +1,7 @@
 <?php
-
 namespace Database\Factories;
 
+use App\Models\Concert;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -21,14 +21,15 @@ class ConcertFactory extends Factory
             },
             'title' => 'Example Band',
             'subtitle' => 'with the Fake Openers',
+            'additional_information' => 'Some sample additional information',
             'date' => Carbon::parse('+2 weeks'),
-            'ticket_price' => 2000,
             'venue' => 'The Example Theatre',
             'venue_address' => '123 Example Lane',
             'city' => 'Fakeville',
             'state' => 'ON',
             'zip' => '90989',
-            'additional_information' => 'Some sample additional information',
+            'ticket_price' => 2000,
+            'ticket_quantity' => 5,
         ];
     }
 
@@ -44,5 +45,19 @@ class ConcertFactory extends Factory
         return $this->state([
             'published_at' => null,
         ]);
+    }
+
+    public static function createPublished($overrides = [])
+    {
+        $concert = Concert::factory()->create($overrides);
+
+        $concert->publish();
+
+        return $concert;
+    }
+
+    public static function createUnpublished($overrides = [])
+    {
+        return Concert::factory()->create($overrides);
     }
 }

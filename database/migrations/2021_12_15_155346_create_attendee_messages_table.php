@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdersTable extends Migration
+class CreateAttendeeMessagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('attendee_messages', function (Blueprint $table) {
             $table->id();
-            $table->string('confirmation_number');
-            $table->string('email');
-            $table->integer('amount');
-            $table->string('card_last_four');
+            $table->unsignedBigInteger('concert_id');
+            $table->string('subject');
+            $table->text('message');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('attendee_messages');
     }
 }

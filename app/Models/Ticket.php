@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use App\Facades\TicketCode;
@@ -14,6 +13,11 @@ class Ticket extends Model
     public function scopeAvailable($query)
     {
         return $query->whereNull('order_id')->whereNull('reserved_at');
+    }
+
+    public function scopeSold($query)
+    {
+        return $query->whereNotNull('order_id');
     }
 
     public function reserve()

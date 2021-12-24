@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Feature;
 
 use App\Billing\FakePaymentGateway;
@@ -30,6 +29,11 @@ class PurchaseTicketsTest extends TestCase
         return $this->json('POST', "/concerts/{$concert->id}/orders", $params);
     }
 
+    // private function assertValidationError($field)
+    // {
+    //     $this->assertArrayHasKey($field, $this->decodeResponseJson()['errors']);
+    // }
+
     /** @test */
     public function customer_can_purchase_tickets_to_a_published_concert()
     {
@@ -37,7 +41,9 @@ class PurchaseTicketsTest extends TestCase
         TicketCode::shouldReceive('generateFor')->andReturn('TICKETCODE1', 'TICKETCODE2', 'TICKETCODE3');
 
         // concert
-        $concert = Concert::factory()->published()->create(['ticket_price' => 3250])->addTickets(3);
+        // $concert = Concert::factory()->published()->create(['ticket_price' => 3250])->addTickets(3);
+
+        $concert = Concert::factory()->createPublished(['ticket_price' => 3250, 'ticket_quantity' => 3]);
 
         // purchase tickets
         $response = $this->orderTickets($concert, [
